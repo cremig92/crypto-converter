@@ -31,8 +31,8 @@ services:
       - ./data:/app/data
     restart: unless-stopped
 
-  # One-off test runner (no local Python needed)
   test:
+    profiles: ["test"]   # <— only runs when profile is enabled
     build: .
     container_name: crypto_test
     working_dir: /app
@@ -40,7 +40,6 @@ services:
       - .env
     environment:
       PYTHONPATH: /app
-    # mount entire repo so tests/ and any changes are visible
     volumes:
       - ./:/app
       - ./data:/app/data

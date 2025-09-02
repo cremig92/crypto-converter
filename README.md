@@ -265,5 +265,5 @@ All tests can be executed inside Docker — no local Python setup is required.
 
 ### Run the full test suite
 ```bash
-docker compose run --rm test
+docker compose --profile test run --rm test
 
