@@ -97,7 +97,7 @@ LOG_LEVEL=INFO
 
 ### 1. Clone & configure
 ```bash
-git clone https://github.com/yourname/crypto-converter.git
+git clone https://github.com/cremig92/crypto-converter.git
 cd crypto-converter
 ```
 
