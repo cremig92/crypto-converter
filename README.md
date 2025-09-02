@@ -102,6 +102,7 @@ cd crypto-converter
 ```
 
 ### 2. Start services
+Start docker, then: 
 ```bash
 docker compose up --build
 ```
@@ -111,26 +112,117 @@ docker compose up --build
 
 ---
 
-## 🔍 Usage
+## 🚀 Usage Examples
 
-### Health
+### Health check
+Verify the API is running:
 ```bash
 curl http://localhost:8000/health
 ```
 
-### Convert DOGE → USDT
+**Example response:**
+```json
+{"status": "ok"}
+```
+
+---
+
+### Latest conversion
+Convert 10 DOGE → USDT:
 ```bash
 curl "http://localhost:8000/convert?amount=10&from=DOGE&to=USDT"
 ```
 
-### Convert USDT → DOGE (auto-inverted)
+**Example response:**
+```json
+{
+  "from": "DOGE",
+  "to": "USDT",
+  "amount_in": 10.0,
+  "rate": 0.0735,
+  "amount_out": 0.735,
+  "timestamp": "2025-09-02T12:30:45Z",
+  "inverted": false
+}
+```
+
+---
+
+### Reverse conversion
+Convert 10 USDT → DOGE (API inverts the DOGE/USDT price):
 ```bash
 curl "http://localhost:8000/convert?amount=10&from=USDT&to=DOGE"
 ```
 
-### Historical conversion (5 minutes ago)
+**Example response:**
+```json
+{
+  "from": "USDT",
+  "to": "DOGE",
+  "amount_in": 10.0,
+  "rate": 13.6054,
+  "amount_out": 136.054,
+  "timestamp": "2025-09-02T12:30:45Z",
+  "inverted": true
+}
+```
+
+---
+
+### Historical conversion
+Convert 1 BTC → USDT as of 5 minutes ago:
+
+**Linux:**
 ```bash
-curl "http://localhost:8000/convert?amount=10&from=DOGE&to=USDT&timestamp=$(date -u -v-5M +%Y-%m-%dT%H:%M:%S)"
+curl "http://localhost:8000/convert?amount=1&from=BTC&to=USDT&timestamp=$(date -u -d '5 minutes ago' +%Y-%m-%dT%H:%M:%S)"
+```
+
+**macOS:**
+```bash
+curl "http://localhost:8000/convert?amount=1&from=BTC&to=USDT&timestamp=$(date -u -v-5M +%Y-%m-%dT%H:%M:%S)"
+```
+
+**Example response:**
+```json
+{
+  "from": "BTC",
+  "to": "USDT",
+  "amount_in": 1.0,
+  "rate": 64250.11,
+  "amount_out": 64250.11,
+  "timestamp": "2025-09-02T12:25:45Z",
+  "inverted": false
+}
+```
+
+---
+
+### Error: outdated quote
+If the latest quote is older than 1 minute:
+```bash
+curl "http://localhost:8000/convert?amount=10&from=ADA&to=USDT"
+```
+
+**Example response:**
+```json
+{
+  "detail": "quotes_outdated"
+}
+```
+
+---
+
+### Error: unsupported pair
+If the pair doesn’t exist (e.g., ABC/XYZ):
+```bash
+curl "http://localhost:8000/convert?amount=10&from=ABC&to=XYZ"
+```
+
+**Example response:**
+```json
+{
+  "detail": "Conversion not available for this pair"
+}
 ```
 
 ---
@@ -169,15 +261,10 @@ This project uses **pytest** with **pytest-asyncio** to cover both **unit** and 
 
 ### Run Tests
 
+Cd to the project folder, then: 
+
 ```bash
 pip install -r requirements.txt
-pytest -v
+python -m pytest -v  
 ```
-
-Options:
-```bash
-pytest -v tests/test_api.py     # API tests only
-pytest --cov=crypto_converter   # with coverage
-```
-
 ---
