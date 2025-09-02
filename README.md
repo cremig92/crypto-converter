@@ -263,18 +263,7 @@ This project uses **pytest** with **pytest-asyncio** to cover both **unit** and 
 
 All tests can be executed inside Docker — no local Python setup is required.
 
-### Run tests
+### Run the full test suite
 ```bash
-docker compose run --rm api sh -lc "pip install -q pytest pytest-asyncio && pytest -v"
-```
+docker compose run --rm test
 
-### Run tests with coverage
-```bash
-docker compose run --rm api sh -lc "pip install -q pytest pytest-asyncio pytest-cov && pytest -v --cov=crypto_converter"
-```
-
-### Debugging inside the container
-You can also drop into a shell and run pytest manually:
-```bash
-docker compose run --rm api sh
-pytest -v

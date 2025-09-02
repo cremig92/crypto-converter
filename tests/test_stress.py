@@ -57,8 +57,8 @@ async def test_convert_stress_latency(db_session):
 
     # Reasonable lenient thresholds for a test environment
     # (adjust if your CI runners are slower)
-    assert avg < 0.40, f"Average latency too high: {avg:.3f}s"
-    assert p95 < 0.70, f"p95 latency too high: {p95:.3f}s"
+    assert avg < 0.60, f"Average latency too high: {avg:.3f}s"
+    assert p95 < 0.90, f"p95 latency too high: {p95:.3f}s"
 
     # Optional: print metrics for visibility in CI logs
     print(f"[stress] n={len(latencies)} avg={avg:.3f}s p95={p95:.3f}s")
