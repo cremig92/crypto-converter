@@ -259,12 +259,22 @@ This project uses **pytest** with **pytest-asyncio** to cover both **unit** and 
 - `conftest.py` ensures function-scoped fixtures  
 - Binance WebSockets are mocked (deterministic + no network required)  
 
-### Run Tests
+## 🧪 Running Tests
 
-Cd to the project folder, then: 
+All tests can be executed inside Docker — no local Python setup is required.
 
+### Run tests
 ```bash
-pip install -r requirements.txt
-python -m pytest -v  
+docker compose run --rm api sh -lc "pip install -q pytest pytest-asyncio && pytest -v"
 ```
----
+
+### Run tests with coverage
+```bash
+docker compose run --rm api sh -lc "pip install -q pytest pytest-asyncio pytest-cov && pytest -v --cov=crypto_converter"
+```
+
+### Debugging inside the container
+You can also drop into a shell and run pytest manually:
+```bash
+docker compose run --rm api sh
+pytest -v
